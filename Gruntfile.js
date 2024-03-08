@@ -337,13 +337,13 @@ module.exports = function (grunt) {
                         case "darwin":
                             return chainCommands([
                                 `sed -i '' -e "s#CyberChef_v${pkg.version}.zip#https://github.com/gchq/CyberChef/releases#" build/prod/index.html`,
-                                `sed -i '' -e "s#Download ZIP file#https://github.com/gchq/CyberChef/releases" build/prod/index.html`,
+                                `sed -i '' -e "s#Download ZIP file#https://github.com/gchq/CyberChef/releases#" build/prod/index.html`,
                                 `sed -i '' -e "s#<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER</li>##" build/prod/index.html`
                             ]);
                         default:
                             return chainCommands([
                                 `sed -i -e "s#CyberChef_v${pkg.version}.zip#https://github.com/gchq/CyberChef/releases#" build/prod/index.html`,
-                                `sed -i -e "s#Download ZIP file#https://github.com/gchq/CyberChef/releases" build/prod/index.html`,
+                                `sed -i -e "s#Download ZIP file#https://github.com/gchq/CyberChef/releases#" build/prod/index.html`,
                                 `sed -i -e "s#<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER</li>##" build/prod/index.html`
                             ]);
                     }
