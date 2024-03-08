@@ -33,7 +33,7 @@ module.exports = function (grunt) {
         ]);
 
     grunt.registerTask("prod-nolocaldownload",
-        "Creates a production-ready build WITHOUT a local zip based deployment. Useful for cloud native deployments like Cloudflare Pages. Use the --msg flag to add a compile message.",
+        "Creates a production-ready build WITHOUT a local zip based deployment. Provide a link to GitHub repo only. Use the --msg flag to add a compile message.",
         [
             "eslint", "clean:prod", "clean:config", "exec:generateConfig", "findModules", "webpack:web",
             "copy:standalone", "clean:standalone", "exec:noLocalDownload", "chmod"
