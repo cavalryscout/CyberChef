@@ -38,7 +38,7 @@ module.exports = function (grunt) {
             "eslint", "clean:prod", "clean:config", "exec:generateConfig", "findModules", "webpack:web",
             "copy:standalone", "clean:standalone", "exec:noDownload", "chmod"
         ]);
-    
+
     grunt.registerTask("prod-githubrelease",
         "Creates a production-ready build WITHOUT a local zip based deployment and instead links to GitHub release pages for download. Use the --msg flag to add a compile message.",
         [
@@ -343,13 +343,13 @@ module.exports = function (grunt) {
                     switch (process.platform) {
                         case "darwin":
                             return chainCommands([
-                                `sed -i '' -e "s/<a href="CyberChef_v${pkg.version}.zip" download class="[ a-z\-]+">Download ZIP file</a>//" build/prod/index.html`,
-                                `sed -i '' -e "s/<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER<\/li>//" build/prod/index.html`
+                                `sed -i '' -e "s#<a href="CyberChef_v${pkg.version}.zip" download class="[ a-z-]+">Download ZIP file</a>##" build/prod/index.html`,
+                                `sed -i '' -e "s#<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER</li>##" build/prod/index.html`
                             ]);
                         default:
                             return chainCommands([
-                                `sed -i -e "s/<a href="CyberChef_v${pkg.version}.zip" download class="[ a-z\-]+">Download ZIP file</a>//" build/prod/index.html`,
-                                `sed -i -e "s/<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER<\/li>//" build/prod/index.html`
+                                `sed -i -e "s#<a href="CyberChef_v${pkg.version}.zip" download class="[ a-z-]+">Download ZIP file</a>##" build/prod/index.html`,
+                                `sed -i -e "s#<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER</li>##" build/prod/index.html`
                             ]);
                     }
                 },
