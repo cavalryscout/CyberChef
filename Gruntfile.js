@@ -32,6 +32,20 @@ module.exports = function (grunt) {
             "copy:standalone", "zip:standalone", "clean:standalone", "exec:calcDownloadHash", "chmod"
         ]);
 
+    grunt.registerTask("prod-nodownload",
+        "Creates a production-ready build WITHOUT a local zip based deployment. Useful for cloud native deployments like Cloudflare Pages. Use the --msg flag to add a compile message.",
+        [
+            "eslint", "clean:prod", "clean:config", "exec:generateConfig", "findModules", "webpack:web",
+            "copy:standalone", "clean:standalone", "exec:noDownload", "chmod"
+        ]);
+    
+    grunt.registerTask("prod-githubrelease",
+        "Creates a production-ready build WITHOUT a local zip based deployment and instead links to GitHub release pages for download. Use the --msg flag to add a compile message.",
+        [
+            "eslint", "clean:prod", "clean:config", "exec:generateConfig", "findModules", "webpack:web",
+            "copy:standalone", "clean:standalone", "exec:linkGitHubRelease", "chmod"
+        ]);
+
     grunt.registerTask("node",
         "Compiles CyberChef into a single NodeJS module.",
         [
@@ -324,6 +338,38 @@ module.exports = function (grunt) {
             }
         },
         exec: {
+            noDownload: {
+                command: function () {
+                    switch (process.platform) {
+                        case "darwin":
+                            return chainCommands([
+                                `sed -i '' -e "s/<a href="CyberChef_v${pkg.version}.zip" download class="[ a-z\-]+">Download ZIP file</a>//" build/prod/index.html`,
+                                `sed -i '' -e "s/<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER<\/li>//" build/prod/index.html`
+                            ]);
+                        default:
+                            return chainCommands([
+                                `sed -i -e "s/<a href="CyberChef_v${pkg.version}.zip" download class="[ a-z\-]+">Download ZIP file</a>//" build/prod/index.html`,
+                                `sed -i -e "s/<li>SHA256 hash: DOWNLOAD_HASH_PLACEHOLDER<\/li>//" build/prod/index.html`
+                            ]);
+                    }
+                },
+            },
+            linkGitHubRelease: {
+                command: function () {
+                    switch (process.platform) {
+                        case "darwin":
+                            return chainCommands([
+                                `sed -i '' -e "s#CyberChef_v${pkg.version}.zip#https://github.com/gchq/CyberChef/releases#" build/prod/index.html`,
+                                `sed -i '' -e "s/DOWNLOAD_HASH_PLACEHOLDER/Refer to GitHub release/" build/prod/index.html`
+                            ]);
+                        default:
+                            return chainCommands([
+                                `sed -i -e "s#CyberChef_v${pkg.version}.zip#https://github.com/gchq/CyberChef/releases#" build/prod/index.html`,
+                                `sed -i -e "s/DOWNLOAD_HASH_PLACEHOLDER/Refer to GitHub release/" build/prod/index.html`
+                            ]);
+                    }
+                },
+            },
             calcDownloadHash: {
                 command: function () {
                     switch (process.platform) {
